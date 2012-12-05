@@ -1,0 +1,21 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    ffi (1.2.0)
+    hallon (0.18.1)
+      ref (~> 1.0)
+      spotify (~> 12.3.0)
+    hallon-openal (1.0.0)
+      hallon (~> 0.13)
+    libspotify (12.1.51.1)
+    ref (1.0.2)
+    spotify (12.3.0)
+      ffi (~> 1.0, >= 1.0.11)
+      libspotify (~> 12.1.51)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  hallon
+  hallon-openal

@@ -1,4 +1,3 @@
-sonic-o-matic
-=============
+# sonic-o-matic
 
-Crowdsourced Spotify playlist assembly!
+Crowdsourced Spotify playlist assembly! Indeed, why not?
