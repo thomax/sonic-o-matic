@@ -5,3 +5,4 @@
 coverage
 config/spotify_appkey.key
 config/spotify_credentials.yml
+tmp
