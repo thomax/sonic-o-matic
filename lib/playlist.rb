@@ -11,12 +11,18 @@ module SonicOMatic
 
     def next_random
       reload
-      @queue.sample
+      track_info = @queue.sample
+      track_code, tweet, user = track_info.split(SonicOMatic::DIVISOR)
+      print_fancy_track_summary(tweet, user)
+      track_code
     end
 
     def next(index = 0)
       reload
-      @queue[index]
+      track_info = @queue.count > index ? @queue[index] : nil
+      track_code, tweet, user = track_info.split(SonicOMatic::DIVISOR)
+      print_fancy_track_summary(tweet, user)
+      track_code
     end
 
     def reload
@@ -24,8 +30,17 @@ module SonicOMatic
       @queue = []
       playlist_file.each {|line| @queue << line }
       playlist_file.close
-      puts "  ==== #{queue.count} tracks in playlist"
+      puts "  #{SonicOMatic::DIVISOR} #{queue.count} tracks in playlist"
     end
+
+    def print_fancy_track_summary(tweet, user)
+      puts ""
+      puts "  #{SonicOMatic::DIVISOR}#{tweet}"
+      puts "         @#{user}"
+      puts ""
+    end
+
+
 
   end
 

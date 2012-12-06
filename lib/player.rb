@@ -1,6 +1,12 @@
 require 'hallon'
 require 'hallon-openal'
 
+# TODO:
+# cli
+# name the playlist in player.rb/playlist.rb
+# some tests
+# player.next/previous
+
 module SonicOMatic
 
   class Player
@@ -17,24 +23,30 @@ module SonicOMatic
 
     def next_track
       if @shuffle
-        track_info = playlist.next_random
+        track_code = playlist.next_random
       else
+        track_code = playlist.next @playlist_position
         @playlist_position += 1
-        track_info = playlist.next @playlist_position
       end
-      track_code = track_info.split(SonicOMatic::DIVISOR).first
-      track = Hallon::Track.new "spotify:track:#{track_code}"
-      track.load
-      artist = track.artist.load
-      puts "playing\t #{artist.name} - #{track.name}"
-      puts ""
-      puts "    " + track_info
-      puts ""
-      track
+      return nil unless track_code
+      "spotify:track:#{track_code}"
     end
 
     def play
-      spotify_player.play! next_track
+      while track_pointer = next_track
+        begin
+          track = Hallon::Track.new track_pointer
+        rescue ArgumentError
+          puts "  #{SonicOMatic::DIVISOR} BOOM! Invalid track #{track_pointer}"
+          next
+        end
+        begin
+          track.load
+          spotify_player.play! track
+        rescue Hallon::Error
+          puts "  #{SonicOMatic::DIVISOR} BOOM! Could not play #{track_pointer}"
+        end
+      end
     end
 
     def spotify_player

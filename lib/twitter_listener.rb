@@ -28,7 +28,7 @@ module SonicOMatic
       puts "Started!"
       TweetStream::Client.new.track('#spotify') do |status|
         track_codes_from_text(status.text).each do |track_code|
-          track_info = "#{track_code}#{SonicOMatic::DIVISOR}#{status.text}"
+          track_info = "#{track_code}#{SonicOMatic::DIVISOR}#{status.text}#{SonicOMatic::DIVISOR}#{status.user.screen_name}"
           puts track_info
           append_to_log track_info
         end
