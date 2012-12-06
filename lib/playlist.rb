@@ -9,31 +9,22 @@ module SonicOMatic
       @queue = []
     end
 
-    def add(track)
-      queue << track
+    def next_random
+      reload
+      @queue.sample
     end
 
-    def remove(n = 0)
-      queue.delete_at(n)
+    def next(index = 0)
+      reload
+      @queue[index]
     end
 
-    def empty
-      queue.clear
-    end
-
-    def next(random = false)
-      unless queue.empty?
-        random ? queue.sample : queue[0]
-      end
-    end
-
-    def print
-      queue.each do |track_code|
-        track = Hallon::Track.new(track_code)
-        track.load
-        artist = track.artist.load
-        puts "#{artist.name} - #{track.name}"
-      end
+    def reload
+      playlist_file = File.open("playlist.txt", 'r')
+      @queue = []
+      playlist_file.each {|line| @queue << line }
+      playlist_file.close
+      puts "  ==== #{queue.count} tracks in playlist"
     end
 
   end
