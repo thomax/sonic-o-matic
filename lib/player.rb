@@ -2,23 +2,22 @@ require 'hallon'
 require 'hallon-openal'
 
 # TODO:
-# cli
-# name the playlist in player.rb/playlist.rb
 # some tests
-# player.next/previous
+# player stop/next/previous
 
 module SonicOMatic
 
   class Player
 
-    attr_accessor :shuffle, :playlist_position
-    def initialize(shuffle = false)
+    attr_accessor :shuffle, :playlist_position, :playlist_file_name
+    def initialize(playlist_file_name, shuffle = false)
       session = Hallon::Session.initialize IO.read('config/spotify_appkey.key')
       user = SPOTIFY_CONFIG['development']['username']
       pass = SPOTIFY_CONFIG['development']['password']
       session.login!(user, pass)
-      @suffle = shuffle
+      @shuffle = shuffle
       @playlist_position = 0
+      @playlist_file_name = playlist_file_name
     end
 
     def next_track
@@ -54,7 +53,7 @@ module SonicOMatic
     end
 
     def playlist
-      @playlist ||= SonicOMatic::Playlist.new
+      @playlist ||= SonicOMatic::Playlist.new(@playlist_file_name)
     end
 
   end

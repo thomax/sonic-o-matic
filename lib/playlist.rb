@@ -4,8 +4,9 @@ module SonicOMatic
 
   class Playlist
 
-    attr_accessor :queue
-    def initialize
+    attr_accessor :queue, :file_name
+    def initialize(file_name)
+      @file_name = file_name
       @queue = []
     end
 
@@ -26,11 +27,11 @@ module SonicOMatic
     end
 
     def reload
-      playlist_file = File.open("playlist.txt", 'r')
+      playlist_file = File.open(@file_name, 'r')
       @queue = []
       playlist_file.each {|line| @queue << line }
       playlist_file.close
-      puts "  #{SonicOMatic::DIVISOR} #{queue.count} tracks in playlist"
+      puts "  #{SonicOMatic::DIVISOR} #{queue.count} tracks in #{@file_name}"
     end
 
     def print_fancy_track_summary(tweet, user)

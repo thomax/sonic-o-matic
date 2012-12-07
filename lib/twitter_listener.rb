@@ -8,29 +8,27 @@ module SonicOMatic
 
   class TwitterListener
 
-    def self.run(file = nil)
-      new(file).run
-    end
-
-    attr_reader :logfile
-    def initialize(file)
-      @logfile = file
-      TweetStream.configure do |config|
-        config.consumer_key       = 'oA1vxvJV2aJ8zipx6lw5A'
-        config.consumer_secret    = 'x1goeXg9Kgz5svT4DXMMM6xnYXjqfHiACupBZaRe35M'
-        config.oauth_token        = '1436071-NO6DOW44WzEjtPYwOUIVskkAZrR0c6nGlv7OxpzRsM'
-        config.oauth_token_secret = 'PKfYlRDoFRB2kUISq3mFbaYJkPBzra4pYYYr2p38Ik'
-        config.auth_method        = :oauth
-      end
+    attr_reader :logfile, :keyword
+    def initialize(logfile, keyword = nil)
+      @logfile = logfile
+      @keyword = keyword
+      configure_tweetstream
     end
 
     def run
-      puts "Started!"
-      TweetStream::Client.new.track('#spotify') do |status|
-        track_codes_from_text(status.text).each do |track_code|
-          track_info = "#{track_code}#{SonicOMatic::DIVISOR}#{status.text}#{SonicOMatic::DIVISOR}#{status.user.screen_name}"
-          puts track_info
-          append_to_log track_info
+      message = "Listening for '#spotify'"
+      message << " and \'#{@keyword}\'" if @keyword
+      message << " on Twitter"
+      message << "\nLogging to #{@logfile}"
+      puts message
+
+      TweetStream::Client.new.track('spotify') do |status|
+        if @keyword.nil? || status.text.downcase.include?(@keyword.downcase)
+          track_codes_from_text(status.text).each do |track_code|
+            track_info = "#{track_code}#{SonicOMatic::DIVISOR}#{status.text}#{SonicOMatic::DIVISOR}#{status.user.screen_name}"
+            puts track_info
+            append_to_log track_info
+          end
         end
       end
     end
@@ -49,17 +47,23 @@ module SonicOMatic
     end
 
     def append_to_log(track_info)
-      if File.exists?(logfile)
-        file = File.open(logfile, 'a')
+      if File.exists?(@logfile)
+        file = File.open(@logfile, 'a')
       else
-        file = File.new(logfile, 'w')
+        file = File.new(@logfile, 'w')
       end
       file.puts track_info
       file.close
     end
 
-    def logfile
-      @logfile ||= "playlist.txt"
+    def configure_tweetstream
+      TweetStream.configure do |config|
+        config.consumer_key       = 'oA1vxvJV2aJ8zipx6lw5A'
+        config.consumer_secret    = 'x1goeXg9Kgz5svT4DXMMM6xnYXjqfHiACupBZaRe35M'
+        config.oauth_token        = '1436071-NO6DOW44WzEjtPYwOUIVskkAZrR0c6nGlv7OxpzRsM'
+        config.oauth_token_secret = 'PKfYlRDoFRB2kUISq3mFbaYJkPBzra4pYYYr2p38Ik'
+        config.auth_method        = :oauth
+      end
     end
 
   end
