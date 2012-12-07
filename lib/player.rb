@@ -1,10 +1,6 @@
 require 'hallon'
 require 'hallon-openal'
 
-# TODO:
-# some tests
-# player stop/next/previous
-
 module SonicOMatic
 
   class Player
