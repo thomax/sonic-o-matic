@@ -38,7 +38,20 @@ module SonicOMatic
         listener.run
       end
       player = Player.new(options['playlist_file_name'], options['shuffle'])
-      player.play
+      loop do
+        player.play
+        show_wait_cursor 5
+      end
+    end
+
+    def show_wait_cursor(seconds, fps=10)
+      chars = %w[| / - \\]
+      delay = 1.0/fps
+      (seconds*fps).round.times{ |i|
+        print chars[i % chars.length]
+        sleep delay
+        print "\b"
+      }
     end
 
   end

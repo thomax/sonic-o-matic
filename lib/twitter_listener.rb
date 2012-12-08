@@ -16,7 +16,7 @@ module SonicOMatic
     end
 
     def run
-      message = "Listening for '#spotify'"
+      message = "Listening for 'spotify'"
       message << " and \'#{@keyword}\'" if @keyword
       message << " on Twitter"
       message << "\nLogging to #{@logfile}"

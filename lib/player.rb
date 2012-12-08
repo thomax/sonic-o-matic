@@ -21,7 +21,7 @@ module SonicOMatic
         track_code = playlist.next_random
       else
         track_code = playlist.next @playlist_position
-        @playlist_position += 1
+        @playlist_position += 1 if track_code
       end
       return nil unless track_code
       "spotify:track:#{track_code}"
