@@ -58,11 +58,11 @@ module SonicOMatic
 
     def configure_tweetstream
       TweetStream.configure do |config|
-        config.consumer_key       = 'oA1vxvJV2aJ8zipx6lw5A'
-        config.consumer_secret    = 'x1goeXg9Kgz5svT4DXMMM6xnYXjqfHiACupBZaRe35M'
-        config.oauth_token        = '1436071-NO6DOW44WzEjtPYwOUIVskkAZrR0c6nGlv7OxpzRsM'
-        config.oauth_token_secret = 'PKfYlRDoFRB2kUISq3mFbaYJkPBzra4pYYYr2p38Ik'
-        config.auth_method        = :oauth
+        config.consumer_key       = CONFIG['twitter']['consumer_key']
+        config.consumer_secret    = CONFIG['twitter']['consumer_secret']
+        config.oauth_token        = CONFIG['twitter']['oauth_token']
+        config.oauth_token_secret = CONFIG['twitter']['oauth_token_secret']
+        config.auth_method        = CONFIG['twitter']['auth_method']
       end
     end
 

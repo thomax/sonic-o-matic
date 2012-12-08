@@ -7,13 +7,10 @@ module SonicOMatic
 
     attr_accessor :shuffle, :playlist_position, :playlist_file_name
     def initialize(playlist_file_name, shuffle = false)
-      session = Hallon::Session.initialize IO.read('config/spotify_appkey.key')
-      user = SPOTIFY_CONFIG['development']['username']
-      pass = SPOTIFY_CONFIG['development']['password']
-      session.login!(user, pass)
       @shuffle = shuffle
       @playlist_position = 0
       @playlist_file_name = playlist_file_name
+      create_session
     end
 
     def next_track
@@ -50,6 +47,11 @@ module SonicOMatic
 
     def playlist
       @playlist ||= SonicOMatic::Playlist.new(@playlist_file_name)
+    end
+
+    def create_session
+      session = Hallon::Session.initialize IO.read('config/spotify_appkey.key')
+      session.login!(CONFIG['spotify']['username'], CONFIG['spotify']['password'])
     end
 
   end
