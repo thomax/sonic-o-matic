@@ -8,14 +8,17 @@ Crowdsourced Spotify playlist assembly :-)
 	cd sonic-o-matic
 	bundle install
 
-Get a Spotify app key.
-Edit config/spotify_credentials.yml
+Get a Spotify app key, and put it here config/spotify_appkey.key.
+
+  cp config/config-example.yml config/config.yml
+
+...and and your Spotify credentials.
 
 	./bin/sonic-o-matic start
 
-## TODO
 
+## TODO
 * some tests
-* player retry while playlist is empty
 * player stop/next/previous
-* extract twitter session config
+* store tracks to a collaborative playlist
+* web interface

@@ -24,19 +24,28 @@ module SonicOMatic
                   :required => false,
                   :default => nil,
                   :desc => "Additional twitter keyword, e.g. '@username' or '#jazz'."
-    method_option :twitter,
+    method_option :run_twitter_listener,
                   :type => :boolean,
                   :aliases => "-t",
                   :required => false,
                   :default => true,
-                  :desc => "Don't start the Twitter listener, just play music in playlist."
+                  :desc => "Start the Twitter listener, disable to just play music from playlist."
     def start
       STDOUT.sync = true
+      run_twitter_listener if options['run_twitter_listener']
+      run_player
+    end
 
+    private
+
+    def run_twitter_listener
       twitter_thread = Thread.new do
         listener = TwitterListener.new(options['playlist_file_name'], options['keyword'])
         listener.run
       end
+    end
+
+    def run_player
       player = Player.new(options['playlist_file_name'], options['shuffle'])
       loop do
         player.play
