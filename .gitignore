@@ -6,3 +6,4 @@ coverage
 config/spotify_appkey.key
 config/config.yml
 tmp
+playlists/*
